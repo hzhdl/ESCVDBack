@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC " -//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!-- 数据库连接的jar包的地址 -->
+    <classPathEntry
+            location="D:\packge\mysql-connector-java-8.0.23.jar"/>
+    <!--targetRuntime:
+        1，MyBatis3：默认的值，生成基于MyBatis3.x以上版本的内容，包括XXXBySample；
+        2，MyBatis3Simple：类似MyBatis3，只是不生成XXXBySample；-->
+    <context id="DB2Tables" defaultModelType="conditional" targetRuntime="MyBatis3">
+        <plugin type="com.softwareloop.mybatis.generator.plugins.LombokPlugin">
+            <!-- enable annotations -->
+            <property name="builder" value="true"/>
+            <!-- annotation's option(boolean) -->
+            <property name="builder.fluent" value="true"/>
+            <!-- annotation's option(String) -->
+            <property name="builder.builderMethodName" value="myBuilder"/>
+            <property name="accessors" value="true"/>
+            <!-- annotation's option(array of String) -->
+            <property name="accessors.prefix" value="m_, _"/>
+            <!-- disable annotations -->
+            <property name="allArgsConstructor" value="false"/>
+        </plugin>
+        <commentGenerator>
+            <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+            <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+            <property name="suppressDate" value="true"/>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否
+            （如果去除注释生成的xml会merge而不是覆盖,如果即不想要注释，又要覆盖需配置UnmergeableXmlMappersPlugin）-->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- mysql数据库连接池 -->
+        <jdbcConnection
+                driverClass="com.mysql.jdbc.Driver"
+                connectionURL="jdbc:mysql://localhost:3306/escvd?characterEncoding=utf8"
+                userId="root"
+                password="680490">
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <!--类型解析器 -->
+            <!-- 默认false，把jdbc decimal 和 numeric 类型解析为integer -->
+            <!-- true，把jdbc decimal 和 numeric 类型解析为java.math.bigdecimal -->
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 生成model实体类文件位置 -->
+        <javaModelGenerator
+                targetPackage="com.escvd.main.entity"
+                targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 生成mapper.xml配置文件位置 -->
+        <sqlMapGenerator
+                targetPackage="Mybatis/Mapper"
+                targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- 生成mapper接口文件位置 -->
+        <javaClientGenerator
+                targetPackage="com.escvd.main.dao"
+                targetProject="src/main/java"
+                type="XMLMAPPER">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- 需要生成的实体类对应的表名，多个实体类复制多份该配置即可 -->
+<!--        <table tableName="smartcontract" mapperName="SmartcontractMapper"-->
+<!--               domainObjectName="SmartcontractDao">-->
+<!--        </table>-->
+        <table tableName="user" mapperName="UserMapper"
+               domainObjectName="UserDao">
+        </table>
+        <table tableName="user_sc" mapperName="UserscMapper"
+               domainObjectName="UserscDao">
+        </table>
+        <table tableName="vuln" mapperName="VulnMapper"
+               domainObjectName="VulnDao">
+        </table>
+
+    </context>
+</generatorConfiguration>
