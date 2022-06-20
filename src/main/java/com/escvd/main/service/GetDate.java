@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -12,33 +12,49 @@ import java.util.*;
 @Getter
 public class GetDate {
 
+    private static SimpleDateFormat s=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public static ArrayList<Date> getAllTopicYesterdayUpload() {
+    //获取最近六个月的日期信息
+    public static ArrayList<Date> getpasthalfyear() {
+        //最近六个月的数据列表
+
         ArrayList<Date> dates = new ArrayList<>();
-        //取时间
-        Date date = new Date();
-        Calendar calendar = new GregorianCalendar();
-        //设置时间
-        calendar.setTime(date);
-        //天数减1
-        calendar.add( Calendar.YEAR,-6);
-        calendar.set(Calendar.HOUR,0);
-        calendar.set(Calendar.MINUTE,0);
-        calendar.set(Calendar.SECOND,0);
-        calendar.set(Calendar.MILLISECOND,0);
-        //获取开始时间，为昨天开始时间
-        Date beginDate = calendar.getTime();
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR,23);
-        calendar.set(Calendar.MINUTE,59);
-        calendar.set(Calendar.SECOND,59);
-        calendar.set(Calendar.MILLISECOND,999);
-        //获取结束时间，为昨天最后时间，精确到毫秒级别
-        Date endDate = calendar.getTime();
 
-        dates.add(beginDate);
-        dates.add(endDate);
+        for (int i = 5; i >=0; i--) {
+//            System.out.println(s.format(getMonthbegindata(-i)));
+//            System.out.println(s.format(getMonthenddata(-i+1)));
+            dates.add(getMonthbegindata(-i));
+            dates.add(getMonthenddata(-i+1));
+        }
+
+
+
 
         return dates;
+    }
+
+    public static Date getMonthbegindata(Integer num){
+        Calendar cal_1=Calendar.getInstance();//获取当前日期
+        cal_1.add(Calendar.MONTH, num);
+        cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天
+        cal_1.set(Calendar.HOUR_OF_DAY,0);
+        cal_1.set(Calendar.MINUTE,0);
+        cal_1.set(Calendar.SECOND,0);
+
+        return cal_1.getTime();
+//        String firstDay = s.format(cal_1.getTime());
+//        System.out.println("-----1------firstDay:"+firstDay);
+    }
+    public static Date getMonthenddata(Integer num){
+        Calendar cale = Calendar.getInstance();
+        cale.add(Calendar.MONTH, num);
+        cale.set(Calendar.DAY_OF_MONTH,0);//设置为1号,当前日期既为本月第一天
+        cale.set(Calendar.HOUR_OF_DAY,23);
+        cale.set(Calendar.MINUTE,59);
+        cale.set(Calendar.SECOND,59);
+
+        return cale.getTime();
+//        String lastDay = s.format(cale.getTime());
+//        System.out.println("-----2------lastDay:"+lastDay);
     }
 }
