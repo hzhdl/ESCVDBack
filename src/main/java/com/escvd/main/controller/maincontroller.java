@@ -202,4 +202,87 @@ public class maincontroller {
         return Result.success(integerChart);
     }
 
+    @RequestMapping("/chart3")
+    //统计合约数和漏洞数
+    public Result chart3(String id,String flag){
+        SimpleDateFormat s=new SimpleDateFormat("yyyy-MM");
+        Integer idd= Integer.parseInt(id);
+
+        UserscDaoExample userscDaoExample = new UserscDaoExample();
+        UserscDaoExample.Criteria criteria = userscDaoExample.createCriteria();
+        criteria.andUseridEqualTo(idd);
+        List<UserscDao> userscDaos = userscMapper.selectByExample(userscDaoExample);
+
+
+        List<SmartcontractDao> smartcontractDaos = new ArrayList<SmartcontractDao>();
+
+        for (UserscDao item:userscDaos) {
+            smartcontractDaos.add(smartcontractMapper.selectByPrimaryKey(Integer.parseInt(item.getSmartcontractid())));
+        }
+
+        //初始化数据数组
+        ArrayList<Integer> result=new ArrayList<>();
+        result.add(0);
+        int times = 0;
+
+        for (SmartcontractDao item: smartcontractDaos) {
+            int number = item.getVulnid();
+            int count = 0;
+            while (number > 0){
+                if(number%2==1){
+                    count++;
+                }
+                number = number / 2;
+            }
+            result.add(result.get(times)+count);
+            times++;
+        }
+        //初始化结果
+        Chart<Integer> integerChart = new Chart<Integer>();
+
+        for (int i = 1; i < result.size(); i++) {
+
+            integerChart.pushobject(result.get(i),Integer.toString(i));
+        }
+
+
+        return Result.success(integerChart);
+    }
+
+    @RequestMapping("/chart4")
+    //统计不同类型漏洞的数量
+    public Result chart4(String id,String flag){
+        SimpleDateFormat s=new SimpleDateFormat("yyyy-MM");
+        Integer idd= Integer.parseInt(id);
+
+        UserscDaoExample userscDaoExample = new UserscDaoExample();
+        UserscDaoExample.Criteria criteria = userscDaoExample.createCriteria();
+        criteria.andUseridEqualTo(idd);
+        List<UserscDao> userscDaos = userscMapper.selectByExample(userscDaoExample);
+
+
+        List<SmartcontractDao> smartcontractDaos = new ArrayList<SmartcontractDao>();
+
+        for (UserscDao item:userscDaos) {
+            smartcontractDaos.add(smartcontractMapper.selectByPrimaryKey(Integer.parseInt(item.getSmartcontractid())));
+        }
+
+        //初始化数据数组
+        ArrayList<Integer> result=new ArrayList<>();
+        for(int i=0;i<6;i++){
+            result.add(0);
+        }
+        for (SmartcontractDao item: smartcontractDaos) {
+            int number = item.getVulnid();
+            int times = 0;
+            while (number > 0){
+                if(number%2==1){
+                    result.set(5-times,result.get(5-times)+1);
+                }
+                number = number / 2;
+                times++;
+            }
+        }
+        return Result.success(result);
+    }
 }
