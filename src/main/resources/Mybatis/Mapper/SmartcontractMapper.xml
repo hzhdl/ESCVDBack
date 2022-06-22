@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.escvd.main.dao.SmartcontractMapper">
+  <resultMap id="BaseResultMap" type="com.escvd.main.entity.SmartcontractDao">
+    <id column="SmartContractID" jdbcType="INTEGER" property="smartcontractid" />
+    <result column="SmartContractName" jdbcType="VARCHAR" property="smartcontractname" />
+    <result column="ABI" jdbcType="VARCHAR" property="abi" />
+    <result column="Code" jdbcType="VARCHAR" property="code" />
+    <result column="ByteCode" jdbcType="VARCHAR" property="bytecode" />
+    <result column="VulnID" jdbcType="INTEGER" property="vulnid" />
+    <result column="TimeStamp" jdbcType="TIMESTAMP" property="timestamp" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    SmartContractID, SmartContractName, ABI, Code, ByteCode, VulnID, TimeStamp
+  </sql>
+  <select id="selectByExample" parameterType="com.escvd.main.entity.SmartcontractDaoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from smartcontract
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from smartcontract
+    where SmartContractID = #{smartcontractid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from smartcontract
+    where SmartContractID = #{smartcontractid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.escvd.main.entity.SmartcontractDaoExample">
+    delete from smartcontract
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.escvd.main.entity.SmartcontractDao">
+    insert into smartcontract (SmartContractID, SmartContractName, 
+      ABI, Code, ByteCode, 
+      VulnID, TimeStamp)
+    values (#{smartcontractid,jdbcType=INTEGER}, #{smartcontractname,jdbcType=VARCHAR}, 
+      #{abi,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{bytecode,jdbcType=VARCHAR}, 
+      #{vulnid,jdbcType=INTEGER}, #{timestamp,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.escvd.main.entity.SmartcontractDao">
+    insert into smartcontract
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="smartcontractid != null">
+        SmartContractID,
+      </if>
+      <if test="smartcontractname != null">
+        SmartContractName,
+      </if>
+      <if test="abi != null">
+        ABI,
+      </if>
+      <if test="code != null">
+        Code,
+      </if>
+      <if test="bytecode != null">
+        ByteCode,
+      </if>
+      <if test="vulnid != null">
+        VulnID,
+      </if>
+      <if test="timestamp != null">
+        TimeStamp,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="smartcontractid != null">
+        #{smartcontractid,jdbcType=INTEGER},
+      </if>
+      <if test="smartcontractname != null">
+        #{smartcontractname,jdbcType=VARCHAR},
+      </if>
+      <if test="abi != null">
+        #{abi,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="bytecode != null">
+        #{bytecode,jdbcType=VARCHAR},
+      </if>
+      <if test="vulnid != null">
+        #{vulnid,jdbcType=INTEGER},
+      </if>
+      <if test="timestamp != null">
+        #{timestamp,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.escvd.main.entity.SmartcontractDaoExample" resultType="java.lang.Long">
+    select count(*) from smartcontract
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update smartcontract
+    <set>
+      <if test="record.smartcontractid != null">
+        SmartContractID = #{record.smartcontractid,jdbcType=INTEGER},
+      </if>
+      <if test="record.smartcontractname != null">
+        SmartContractName = #{record.smartcontractname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.abi != null">
+        ABI = #{record.abi,jdbcType=VARCHAR},
+      </if>
+      <if test="record.code != null">
+        Code = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bytecode != null">
+        ByteCode = #{record.bytecode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vulnid != null">
+        VulnID = #{record.vulnid,jdbcType=INTEGER},
+      </if>
+      <if test="record.timestamp != null">
+        TimeStamp = #{record.timestamp,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update smartcontract
+    set SmartContractID = #{record.smartcontractid,jdbcType=INTEGER},
+      SmartContractName = #{record.smartcontractname,jdbcType=VARCHAR},
+      ABI = #{record.abi,jdbcType=VARCHAR},
+      Code = #{record.code,jdbcType=VARCHAR},
+      ByteCode = #{record.bytecode,jdbcType=VARCHAR},
+      VulnID = #{record.vulnid,jdbcType=INTEGER},
+      TimeStamp = #{record.timestamp,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.escvd.main.entity.SmartcontractDao">
+    update smartcontract
+    <set>
+      <if test="smartcontractname != null">
+        SmartContractName = #{smartcontractname,jdbcType=VARCHAR},
+      </if>
+      <if test="abi != null">
+        ABI = #{abi,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        Code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="bytecode != null">
+        ByteCode = #{bytecode,jdbcType=VARCHAR},
+      </if>
+      <if test="vulnid != null">
+        VulnID = #{vulnid,jdbcType=INTEGER},
+      </if>
+      <if test="timestamp != null">
+        TimeStamp = #{timestamp,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where SmartContractID = #{smartcontractid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.escvd.main.entity.SmartcontractDao">
+    update smartcontract
+    set SmartContractName = #{smartcontractname,jdbcType=VARCHAR},
+      ABI = #{abi,jdbcType=VARCHAR},
+      Code = #{code,jdbcType=VARCHAR},
+      ByteCode = #{bytecode,jdbcType=VARCHAR},
+      VulnID = #{vulnid,jdbcType=INTEGER},
+      TimeStamp = #{timestamp,jdbcType=TIMESTAMP}
+    where SmartContractID = #{smartcontractid,jdbcType=INTEGER}
+  </update>
+</mapper>
