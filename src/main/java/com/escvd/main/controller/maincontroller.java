@@ -54,6 +54,54 @@ public class maincontroller {
         return Result.success(userDaos);
     }
 
+    @RequestMapping("/Dcomplie")
+    public Result Dcomplie(String userid,String ABI,String Code,String ByteCode,Integer flag){
+
+        Integer id=Integer.parseInt(userid);
+        //向usersc中添加数据
+        int i = new Date().toString().hashCode();
+        UserscDao userscDao = new UserscDao(id,String.valueOf(i));
+        System.out.println(userscDao);
+
+        userscMapper.insert(userscDao);
+
+        //向SC中添加数据   这里的vulnid 为随机写的需要进一步的结合后期python脚本进行确定
+        SmartcontractDao smartcontractDao = new SmartcontractDao(i,ABI,Code,ByteCode,11,new Date());
+
+        System.out.println(smartcontractDao);
+
+        smartcontractMapper.insert(smartcontractDao);
+
+
+        return Result.success("success");
+    }
+
+    @RequestMapping("/complie")
+    public Result complie(String userid,String ABI,Integer flag){
+
+        Integer id=Integer.parseInt(userid);
+        //向usersc中添加数据
+        int i = new Date().toString().hashCode();
+        UserscDao userscDao = new UserscDao(id,String.valueOf(i));
+        System.out.println(userscDao);
+
+        userscMapper.insert(userscDao);
+
+        //向SC中添加数据   这里的vulnid 为随机写的需要进一步的结合后期python脚本进行确定
+        SmartcontractDao smartcontractDao = new SmartcontractDao(i,ABI,Code,ByteCode,11,new Date());
+
+        System.out.println(smartcontractDao);
+
+        smartcontractMapper.insert(smartcontractDao);
+
+
+        return Result.success("success");
+    }
+
+
+
+
+
     @RequestMapping("/chart1")
     //合约和时间
     public Result chart1(String id,String flag){
