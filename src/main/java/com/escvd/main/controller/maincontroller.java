@@ -7,6 +7,7 @@ import com.escvd.main.dao.VulnMapper;
 import com.escvd.main.entity.*;
 import com.escvd.main.service.Chart;
 import com.escvd.main.service.GetDate;
+import com.escvd.main.service.Hisinfo;
 import com.escvd.main.service.Result;
 import com.sun.javafx.collections.MappingChange;
 import io.swagger.models.auth.In;
@@ -55,7 +56,7 @@ public class maincontroller {
     }
 
     @RequestMapping("/Dcomplie")
-    public Result Dcomplie(String userid,String ABI,String Code,String ByteCode,Integer flag){
+    public Result Dcomplie(String userid,String scname,String ABI,String Code,String ByteCode,Integer flag){
 
         Integer id=Integer.parseInt(userid);
         //向usersc中添加数据
@@ -66,18 +67,19 @@ public class maincontroller {
         userscMapper.insert(userscDao);
 
         //向SC中添加数据   这里的vulnid 为随机写的需要进一步的结合后期python脚本进行确定
-        SmartcontractDao smartcontractDao = new SmartcontractDao(i,ABI,Code,ByteCode,11,new Date());
+        SmartcontractDao smartcontractDao = new SmartcontractDao(i,scname,ABI,Code,ByteCode,11,new Date());
 
         System.out.println(smartcontractDao);
 
-        smartcontractMapper.insert(smartcontractDao);
+        int ii=smartcontractMapper.insert(smartcontractDao);
 
 
-        return Result.success("success");
+        return Result.success(ii);
     }
 
     @RequestMapping("/complie")
-    public Result complie(String userid,String ABI,Integer flag){
+    public Result complie(String userid,String scname,String ByteCode,Integer flag){
+        System.out.println(ByteCode);
 
         Integer id=Integer.parseInt(userid);
         //向usersc中添加数据
@@ -88,18 +90,15 @@ public class maincontroller {
         userscMapper.insert(userscDao);
 
         //向SC中添加数据   这里的vulnid 为随机写的需要进一步的结合后期python脚本进行确定
-        SmartcontractDao smartcontractDao = new SmartcontractDao(i,ABI,Code,ByteCode,11,new Date());
+        SmartcontractDao smartcontractDao = new SmartcontractDao(i,scname,"test","test",ByteCode,11,new Date());
 
         System.out.println(smartcontractDao);
 
-        smartcontractMapper.insert(smartcontractDao);
+        int ii=smartcontractMapper.insert(smartcontractDao);
 
 
-        return Result.success("success");
+        return Result.success(ii);
     }
-
-
-
 
 
     @RequestMapping("/chart1")
@@ -248,6 +247,43 @@ public class maincontroller {
 
 
         return Result.success(integerChart);
+    }
+
+
+    @RequestMapping("/hisinfo")
+    //合约和时间
+    public Result hisinfo(String id,String flag,Integer limit,Integer pages){
+        SimpleDateFormat s=new SimpleDateFormat("yyyy-MM");
+        Integer idd= Integer.parseInt(id);
+
+        UserscDaoExample userscDaoExample = new UserscDaoExample();
+        UserscDaoExample.Criteria criteria = userscDaoExample.createCriteria();
+        criteria.andUseridEqualTo(idd);
+        List<UserscDao> userscDaos = userscMapper.selectByExample(userscDaoExample);
+        int length=userscDaos.size();
+        int toindex=pages*limit;
+        if (length<pages*limit){
+            toindex=length;
+        }
+        userscDaos=userscDaos.subList((pages-1)*limit,toindex);
+
+        //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+//        System.out.println(userscDaos);
+        //System.out.println(Integer.parseInt(userscDaos.get(0).getSmartcontractid())+"   "+userscDaos.get(0).getSmartcontractid());
+
+        ArrayList<Hisinfo> hisinfos = new ArrayList<>();
+
+
+        for (UserscDao item:userscDaos) {
+            Hisinfo hisinfo = new Hisinfo(smartcontractMapper.selectByPrimaryKey(Integer.parseInt(item.getSmartcontractid())));
+            hisinfo.setUsername(userMapper.selectByPrimaryKey(idd).getUsername());
+            hisinfos.add(hisinfo);
+        }
+
+
+
+        return Result.success(hisinfos,length);
     }
 
     @RequestMapping("/chart3")

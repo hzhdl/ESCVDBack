@@ -72,18 +72,18 @@
         </javaClientGenerator>
 
         <!-- 需要生成的实体类对应的表名，多个实体类复制多份该配置即可 -->
-<!--        <table tableName="smartcontract" mapperName="SmartcontractMapper"-->
-<!--               domainObjectName="SmartcontractDao">-->
+        <table tableName="smartcontract" mapperName="SmartcontractMapper"
+               domainObjectName="SmartcontractDao">
+        </table>
+<!--        <table tableName="user" mapperName="UserMapper"-->
+<!--               domainObjectName="UserDao">-->
 <!--        </table>-->
-        <table tableName="user" mapperName="UserMapper"
-               domainObjectName="UserDao">
-        </table>
-        <table tableName="user_sc" mapperName="UserscMapper"
-               domainObjectName="UserscDao">
-        </table>
-        <table tableName="vuln" mapperName="VulnMapper"
-               domainObjectName="VulnDao">
-        </table>
+<!--        <table tableName="user_sc" mapperName="UserscMapper"-->
+<!--               domainObjectName="UserscDao">-->
+<!--        </table>-->
+<!--        <table tableName="vuln" mapperName="VulnMapper"-->
+<!--               domainObjectName="VulnDao">-->
+<!--        </table>-->
 
     </context>
 </generatorConfiguration>
