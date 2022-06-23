@@ -45,4 +45,11 @@ public class Result implements Serializable {
         result.setData("");
         return result;
     }
+    public static Result failure(Object data){
+        Result result=new Result();
+        result.setCode(0);
+        result.setMsg("fail");
+        result.setData(data);
+        return result;
+    }
 }

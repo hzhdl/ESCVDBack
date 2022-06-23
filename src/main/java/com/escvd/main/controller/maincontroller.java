@@ -41,18 +41,46 @@ public class maincontroller {
     public VulnMapper vulnMapper;
 
     @RequestMapping("/login")
-    public Result login(){
+    public Result login(String name,String psd){
+        UserDaoExample userDaoExample = new UserDaoExample();
+        userDaoExample.setDistinct(false);
+        UserDaoExample.Criteria criteria = userDaoExample.createCriteria();
+        criteria.andUsernameEqualTo(name);
+        List<UserDao> userDaos = userMapper.selectByExample(userDaoExample);
+        if (userDaos.size()==1){
+            if (userDaos.get(0).getPassword().equals(psd)){
+                System.out.println(userDaos.get(0).getUserid().toString());
+                return Result.success(userDaos.get(0),userDaos.get(0).getUserid().toString());
+            }
+            else {
+                return Result.failure("密码或用户名错误");
+            }
+        }else {
+            return Result.failure("用户不存在，请重新注册");
+        }
+
+    }
+    @RequestMapping("/register")
+    public Result register(String name,String psd) {
+        int i=new Date().toString().hashCode();
+
 
         UserDaoExample userDaoExample = new UserDaoExample();
         userDaoExample.setDistinct(false);
         UserDaoExample.Criteria criteria = userDaoExample.createCriteria();
-        criteria.andUseridEqualTo(123);
-
-        List<UserDao> userDaos = userMapper.selectByExample(userDaoExample);
-
-        System.out.println(userDaos);
-
-        return Result.success(userDaos);
+        criteria.andUsernameEqualTo(name);
+        long l = userMapper.countByExample(userDaoExample);
+        if (l!=0){
+            return Result.failure("用户名已存在，请更改用户名");
+        }
+        UserDao ud = new UserDao(i,name,"test",psd);
+        int user=userMapper.insert(ud);
+        if (user==1){
+            return Result.success("注册成功");
+        }
+        else {
+            return Result.failure("注册失败，请重试");
+        }
     }
 
     @RequestMapping("/Dcomplie")
